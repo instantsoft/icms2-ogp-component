@@ -1,0 +1,2 @@
+INSERT INTO `{#}controllers` (`title`, `name`, `is_enabled`, `options`, `author`, `url`, `version`, `is_backend`) VALUES
+('Микроформат Open Graph', 'opengraph', 1, '---\nenabled_ctypes:\nis_https_available: null\ndefault_image:\n', 'InstantMedia Team', 'http://www.instantmedia.ru/', '1.2.0', 1);
