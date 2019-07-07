@@ -1,9 +1,10 @@
 <?php
 /******************************************************************************/
 //                                                                            //
-//                             InstantMedia 2015                              //
-//	 		  http://www.instantvideo.ru/, support@instantvideo.ru            //
+//                               InstantMedia                                 //
+//	 		      http://instantvideo.ru/, support@instantvideo.ru            //
 //                               written by Fuze                              //
+//                     https://instantvideo.ru/copyright.html                 //
 //                                                                            //
 /******************************************************************************/
 class formOpengraphOptions extends cmsForm {
@@ -52,7 +53,7 @@ class formOpengraphOptions extends cmsForm {
                         'options' => array(
                             'sizes' => array('small', 'original')
                         )
-                    )),
+                    ))
 
                 )
             )

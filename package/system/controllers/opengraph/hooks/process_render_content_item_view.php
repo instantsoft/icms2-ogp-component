@@ -1,16 +1,20 @@
 <?php
 /******************************************************************************/
 //                                                                            //
-//                             InstantMedia 2015                              //
-//	 		  http://www.instantvideo.ru/, support@instantvideo.ru            //
+//                               InstantMedia                                 //
+//	 		      http://instantvideo.ru/, support@instantvideo.ru            //
 //                               written by Fuze                              //
+//                     https://instantvideo.ru/copyright.html                 //
 //                                                                            //
 /******************************************************************************/
-class onOpengraphContentBeforeItem extends cmsAction {
+class onOpengraphProcessRenderContentItemView extends cmsAction {
 
     public function run($data){
 
-        list($ctype, $item, $fields) = $data;
+        list($template_path, $params, $request) = $data;
+
+        $ctype = $params['ctype'];
+        $item  = $params['item'];
 
         if(empty($this->options['enabled_ctypes'])){
             return $data;
@@ -25,60 +29,63 @@ class onOpengraphContentBeforeItem extends cmsAction {
         }
 
         // формируем изображения
-        $image_urls = array();
-        if(!empty($ctype['options']['image_fields'])){
-            foreach ($ctype['options']['image_fields'] as $key=>$image_field) {
-                if(empty($item[$image_field])){
+        $image_urls = [];
+        if(!empty($ctype['options']['og_images'])){
+            foreach ($ctype['options']['og_images'] as $image_field) {
+
+                if(empty($item[$image_field['field']])){
                     continue;
                 }
-                $preset = isset($ctype['options']['image_preset'][$key]) ? $ctype['options']['image_preset'][$key] : 'small';
-                $images = cmsModel::yamlToArray($item[$image_field]);
+
+                $images = cmsModel::yamlToArray($item[$image_field['field']]);
+
                 // берем первое поле
                 $image = reset($images);
+
                 if(is_array($image)){
                     foreach ($images as $image) {
-                        $image_urls[] = $image[$preset];
+                        $image_urls[] = $image[$image_field['preset']];
                     }
                 } else {
-                    $image_urls[] = $images[$preset];
+                    $image_urls[] = $images[$image_field['preset']];
                 }
+
             }
         }
 
-        // пробелы и переносы нам не нужны
-        $item['seo_desc'] = preg_replace('!\s+!', ' ', $item['seo_desc']);
-
         $template = $this->setBasicOpenGraph(array(
-            'title'=>$item['title'],
-            'description'=>($item['seo_desc'] ? $item['seo_desc'] : $item['title']),
-            'type'=>$ctype['options']['og_type'],
-            'url'=>href_to($ctype['name'], $item['slug'].'.html'),
-            'image_urls'=>$image_urls
+            'title'       => $params['item_seo']['title_str'],
+            'description' => $params['item_seo']['desc_str'],
+            'type'        => $ctype['options']['og_type'],
+            'url'         => href_to($ctype['name'], $item['slug'] . '.html'),
+            'image_urls'  => $image_urls
         ));
 
         // дополнительные поля
         if(!empty($ctype['options']['other_field'])){
 
-            foreach ($ctype['options']['other_field'] as $key=>$other_field) {
+            foreach ($ctype['options']['other_field'] as $key => $other_field) {
 
                 if(!empty($ctype['options']['const_field'][$key])){
                     $fcontent = string_replace_keys_values($ctype['options']['const_field'][$key], $item);
                     if(strpos($fcontent, '{host}') !== false){
-                        $fcontent = str_replace('{host}', $this->protocol.$_SERVER['HTTP_HOST'].cmsConfig::get('root'), $fcontent);
+                        $fcontent = str_replace('{host}', $this->cms_config->host.$this->cms_config->root, $fcontent);
                     }
                 } else {
 
-                    $fcontent = $item[$ctype['options']['other_field_name'][$key]];
                     if(strpos($ctype['options']['other_field_name'][$key], 'date_') !== false){
-                        $fcontent = date('c', strtotime($item['date_pub']));
+                        $item[$ctype['options']['other_field_name'][$key]] = date('c', strtotime($item[$ctype['options']['other_field_name'][$key]]));
                     }
+
+                    $fcontent = $item[$ctype['options']['other_field_name'][$key]];
+
                     if(!empty($ctype['options']['other_field_func'][$key]) && function_exists($ctype['options']['other_field_func'][$key])){
                         $fcontent = $ctype['options']['other_field_func'][$key]($fcontent);
                     }
 
                 }
 
-                $template->addHead('<meta property="'.htmlspecialchars($other_field).'" content="'.htmlspecialchars($fcontent).'"/>');
+                $template->addHead('<meta property="'.html($other_field, false).'" content="'.html($fcontent, false).'"/>');
 
             }
 
@@ -91,14 +98,14 @@ class onOpengraphContentBeforeItem extends cmsAction {
                 $template->addHead('<meta property="article:expiration_time" content="'.date('c', strtotime($item['date_pub_end'])).'"/>');
             }
             if(!empty($item['category']['title'])){
-                $template->addHead('<meta property="article:section" content="'.htmlspecialchars($item['category']['title']).'"/>');
+                $template->addHead('<meta property="article:section" content="'.html($item['category']['title'], false).'"/>');
             }
             if(!empty($item['tags'])){
-                $template->addHead('<meta property="article:tag" content="'.htmlspecialchars(is_array($item['tags']) ? implode(', ', $item['tags']) : $item['tags']).'"/>');
+                $template->addHead('<meta property="article:tag" content="'.html((is_array($item['tags']) ? implode(', ', $item['tags']) : $item['tags']), false).'"/>');
             }
         }
 
-        return array($ctype, $item, $fields);
+        return $data;
 
     }
 

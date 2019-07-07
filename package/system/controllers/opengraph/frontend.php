@@ -1,30 +1,16 @@
 <?php
 /******************************************************************************/
 //                                                                            //
-//                             InstantMedia 2015                              //
-//	 		  http://www.instantvideo.ru/, support@instantvideo.ru            //
+//                               InstantMedia                                 //
+//	 		      http://instantvideo.ru/, support@instantvideo.ru            //
 //                               written by Fuze                              //
+//                     https://instantvideo.ru/copyright.html                 //
 //                                                                            //
 /******************************************************************************/
+
 class opengraph extends cmsFrontend {
 
     protected $useOptions = true;
-
-    public $protocol = 'http://';
-
-    public function __construct($request) {
-
-        parent::__construct($request);
-
-        if(
-                (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
-                (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ||
-                (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
-            ){
-            $this->protocol = 'https://';
-        }
-
-    }
 
     /**
      * Устанавливает обязательные теги opengraph
@@ -33,15 +19,19 @@ class opengraph extends cmsFrontend {
      */
     public function setBasicOpenGraph($param) {
 
-        $cfg      = cmsConfig::getInstance();
         $template = cmsTemplate::getInstance();
 
-        $template->addHead('<meta property="og:title" content="'.htmlspecialchars($param['title']).'"/>');
-        $template->addHead('<meta property="og:type" content="'.htmlspecialchars($param['type']).'" />');
-        $template->addHead('<meta property="og:url" content="'.$this->protocol.$_SERVER['HTTP_HOST'].$param['url'].'" />');
-        $template->addHead('<meta property="og:site_name" content="'.htmlspecialchars(cmsConfig::get('sitename')).'"/>');
+        $template->addHead('<meta property="og:title" content="'.html((!empty($template->title_item) ? string_replace_keys_values_extended($param['title'], $template->title_item) : $param['title']), false).'"/>');
+        $template->addHead('<meta property="og:type" content="'.html($param['type'], false).'" />');
+        $template->addHead('<meta property="og:url" content="'.$this->cms_config->host.$param['url'].'" />');
+        $template->addHead('<meta property="og:site_name" content="'.html($this->cms_config->sitename, false).'"/>');
         if(!empty($param['description'])){
-            $template->addHead('<meta property="og:description" content="'.htmlspecialchars($param['description']).'"/>');
+
+            $param['description'] = !empty($template->metadesc_item) ? string_replace_keys_values_extended($param['description'], $template->metadesc_item) : $param['description'];
+            $param['description'] = preg_replace('!\s+!', ' ', $param['description']);
+
+            $template->addHead('<meta property="og:description" content="'.html($param['description'], false).'"/>');
+
         }
 
         // если сюда картинка не дошла, ставим картинку по умолчанию
@@ -69,19 +59,20 @@ class opengraph extends cmsFrontend {
                     continue;
                 }
 
-                $img_size = @getimagesize($cfg->upload_path.$image_url);
-                $is_https_image_host = strpos($cfg->upload_host_abs, 'https') !== false;
+                $img_size = @getimagesize($this->cms_config->upload_path.$image_url);
 
-                if($img_size){
+                if($img_size !== false){
 
-                    $template->addHead('<meta property="og:image" content="'.($is_https_image_host ? str_replace('https', 'http', $cfg->upload_host_abs) : $cfg->upload_host_abs).'/'.$image_url.'"/>');
+                    $template->addHead('<meta property="og:image" content="'.$this->cms_config->upload_host_abs.'/'.$image_url.'"/>');
+
                     if($this->options['is_https_available']){
-                        $template->addHead('<meta property="og:image:secure_url" content="'.($is_https_image_host ? $cfg->upload_host_abs : str_replace('http', 'https', $cfg->upload_host_abs)).'/'.$image_url.'"/>');
+                        $template->addHead('<meta property="og:image:secure_url" content="'.str_replace('http', 'https', $this->cms_config->upload_host_abs).'/'.$image_url.'"/>');
                     }
 
                     $template->addHead('<meta property="og:image:type" content="'.$img_size['mime'].'"/>', false);
                     $template->addHead('<meta property="og:image:height" content="'.$img_size[1].'"/>', false);
                     $template->addHead('<meta property="og:image:width" content="'.$img_size[0].'"/>', false);
+
                 }
 
             }
