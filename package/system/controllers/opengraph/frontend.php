@@ -60,13 +60,14 @@ class opengraph extends cmsFrontend {
                 }
 
                 $img_size = @getimagesize($this->cms_config->upload_path.$image_url);
+		$is_https_image_host = strpos($this->cms_config->upload_host_abs, 'https') !== false;
 
                 if($img_size !== false){
 
                     $template->addHead('<meta property="og:image" content="'.$this->cms_config->upload_host_abs.'/'.$image_url.'"/>');
 
                     if($this->options['is_https_available']){
-                        $template->addHead('<meta property="og:image:secure_url" content="'.str_replace('http', 'https', $this->cms_config->upload_host_abs).'/'.$image_url.'"/>');
+                        $template->addHead('<meta property="og:image:secure_url" content="' . ($is_https_image_host ? $this->cms_config->upload_host_abs : str_replace('http', 'https', $this->cms_config->upload_host_abs)) . '/' . $image_url . '"/>');
                     }
 
                     $template->addHead('<meta property="og:image:type" content="'.$img_size['mime'].'"/>', false);
