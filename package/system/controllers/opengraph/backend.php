@@ -1,19 +1,21 @@
 <?php
-/******************************************************************************/
-//                                                                            //
-//                               InstantMedia                                 //
-//	 		      http://instantvideo.ru/, support@instantvideo.ru            //
-//                               written by Fuze                              //
-//                     https://instantvideo.ru/copyright.html                 //
-//                                                                            //
-/******************************************************************************/
-class backendOpengraph extends cmsBackend{
+
+class backendOpengraph extends cmsBackend {
 
     public $useDefaultOptionsAction = true;
     protected $useOptions = true;
 
-    public function actionIndex(){
-        $this->redirectToAction('options');
+    public function getBackendMenu() {
+        return [
+            [
+                'title' => LANG_OPTIONS,
+                'url'   => href_to($this->root_url)
+            ],
+            [
+                'title' => LANG_OPENGRAPH_PRESETS,
+                'url'   => href_to($this->root_url, 'img_presets')
+            ]
+        ];
     }
 
 }

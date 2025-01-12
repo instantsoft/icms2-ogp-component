@@ -1,33 +1,30 @@
 <?php
-/******************************************************************************/
-//                                                                            //
-//                               InstantMedia                                 //
-//	 		      http://instantvideo.ru/, support@instantvideo.ru            //
-//                               written by Fuze                              //
-//                     https://instantvideo.ru/copyright.html                 //
-//                                                                            //
-/******************************************************************************/
+
 class onOpengraphCtypeBeforeUpdate extends cmsAction {
 
-    public function run($ctype){
+    public function run($ctype) {
 
-        $other_fields = array(
-            'other_field', 'const_field', 'other_field_name', 'other_field_func'
-        );
+        $other_fields = [
+            'other_field', 'const_field'
+        ];
 
         foreach ($other_fields as $other_field_name) {
 
-            if(isset($_REQUEST['options'][$other_field_name])){
-                foreach ($_REQUEST['options'][$other_field_name] as $key => $value) {
-                    $_REQUEST['options'][$other_field_name][$key] = strip_tags(trim($value));
-                }
-                $ctype['options'][$other_field_name] = $_REQUEST['options'][$other_field_name];
-            }
+            $field_value = $this->cms_core->request->get('options:' . $other_field_name, []);
 
+            $ctype['options'][$other_field_name] = [];
+
+            foreach ($field_value as $key => $value) {
+
+                if (!is_numeric($key) || is_array($value)) {
+                    continue;
+                }
+
+                $ctype['options'][$other_field_name][$key] = strip_tags(trim($value));
+            }
         }
 
         return $ctype;
-
     }
 
 }

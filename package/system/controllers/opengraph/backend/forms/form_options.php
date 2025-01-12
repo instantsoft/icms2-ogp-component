@@ -1,65 +1,82 @@
 <?php
-/******************************************************************************/
-//                                                                            //
-//                               InstantMedia                                 //
-//	 		      http://instantvideo.ru/, support@instantvideo.ru            //
-//                               written by Fuze                              //
-//                     https://instantvideo.ru/copyright.html                 //
-//                                                                            //
-/******************************************************************************/
+
 class formOpengraphOptions extends cmsForm {
+
+    use icms\controllers\opengraph\ogtypes;
 
     public function init() {
 
-        return array(
+        $presets = cmsCore::getModel('images')->getPresetsList();
 
-            array(
-                'type' => 'fieldset',
-                'childs' => array(
+        return [
+            [
+                'type'   => 'fieldset',
+                'childs' => [
+                    new fieldString('html_attr_value', [
+                        'title' => LANG_OPENGRAPH_HTML_ATTR_VALUE,
+                        'default' => 'og: http://ogp.me/ns# video: http://ogp.me/ns/video# ya: http://webmaster.yandex.ru/vocabularies/ article: http://ogp.me/ns/article#  profile: http://ogp.me/ns/profile#'
+                    ]),
+                    new fieldList('og_type_default', [
+                        'title'   => LANG_OPENGRAPH_TYPE_DEFAULT,
+                        'default' => 'website',
+                        'items'   => $this->getOgTypes()
+                    ]),
+                    new fieldCheckbox('print_img_params', [
+                        'title' => LANG_OPENGRAPH_PRINT_IMG_PARAMS
+                    ]),
+                    new fieldList('display_image_type', [
+                        'title' => LANG_OPENGRAPH_IMG_TYPE,
+                        'items' => [
+                            'gen' => LANG_OPENGRAPH_IMG_TYPE0,
+                            'item' => LANG_OPENGRAPH_IMG_TYPE1
+                        ],
+                        'default' => 'item'
+                    ]),
+                    new fieldList('default_gen_preset_id', [
+                        'title' => LANG_OPENGRAPH_IMG_DEF_PRESET,
+                        'default' => 1,
+                        'generator' => function () {
 
-					new fieldList('enabled_ctypes', array(
-						'title' => LANG_OPENGRAPH_ENABLED_CTYPES,
-						'hint' => LANG_OPENGRAPH_ENABLED_CTYPES_HINT,
-                        'is_multiple' => true,
-						'generator' => function(){
+                            $items = [];
 
-							$model = new cmsModel();
+                            $p = (new cmsModel())->get('og_img_presets') ?: [];
 
-							$ps = $model->get('content_types');
+                            foreach ($p as $i) {
+                                $items[$i['id']] = $i['title'];
+                            }
 
-							if ($ps){
-								foreach($ps as $p){
-									$items[$p['name']] = $p['title'];
-								}
-							}
-
-							return $items;
-
-						}
-					)),
-
-                    new fieldCheckbox('is_https_available', array(
-                        'title' => LANG_OPENGRAPH_IS_HTTPS_AVAILABLE,
-						'hint' => LANG_OPENGRAPH_IS_HTTPS_AVAILABLE_HINT
-                    )),
-
-                    new fieldNumber('max_image_count', array(
-                        'title' => LANG_OPENGRAPH_MAX_IMAGE_COUNT
-                    )),
-
-                    new fieldImage('default_image', array(
+                            return $items;
+                        },
+                        'default' => 1,
+                        'visible_depend' => ['display_image_type' => ['show' => ['gen']]]
+                    ]),
+                    new fieldNumber('max_image_count', [
+                        'title' => LANG_OPENGRAPH_MAX_IMAGE_COUNT,
+                        'default' => 0,
+                        'visible_depend' => ['display_image_type' => ['show' => ['item']]]
+                    ]),
+                    new fieldImage('default_image', [
                         'title' => LANG_OPENGRAPH_DEFAULT_IMAGE,
-						'hint' => LANG_OPENGRAPH_DEFAULT_IMAGE_HINT,
-                        'options' => array(
-                            'sizes' => array('small', 'original')
-                        )
-                    ))
-
-                )
-            )
-
-        );
-
+                        'hint'  => LANG_OPENGRAPH_DEFAULT_IMAGE_HINT,
+                        'visible_depend' => ['display_image_type' => ['show' => ['item']]]
+                    ]),
+                    new fieldList('default_image_preset', [
+                        'title' => LANG_OPENGRAPH_DEFAULT_IMAGE_PRESET,
+                        'items' => $presets,
+                        'default' => 'big',
+                        'visible_depend' => ['display_image_type' => ['show' => ['item']]]
+                    ]),
+                    new fieldText('url_mask_not', [
+                        'title' => LANG_OPENGRAPH_URL_MASK_NOT,
+                        'hint' => LANG_OPENGRAPH_URL_MASK_NOT_HINT,
+                        'default' => "admin*\npages/add\npages/edit/*\nusers/{slug}/edit"
+                    ]),
+                    new fieldCheckbox('cut_sitename_from_title', [
+                        'title' => LANG_OPENGRAPH_CUT_STITLE
+                    ])
+                ]
+            ]
+        ];
     }
 
 }

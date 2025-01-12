@@ -1,13 +1,20 @@
 <?php
-/******************************************************************************/
-//                                                                            //
-//                             InstantMedia 2015                              //
-//	 		  http://www.instantvideo.ru/, support@instantvideo.ru            //
-//                               written by Fuze                              //
-//                                                                            //
-/******************************************************************************/
+
 define('LANG_OPENGRAPH_CONTROLLER', 'Open Graph microformat');
-define('LANG_OPENGRAPH_TYPE', 'Open Graph markup type');
+define('LANG_OPENGRAPH_URL_MASK_NOT', 'Page masks that don\'t need Open Graph markup');
+define('LANG_OPENGRAPH_URL_MASK_NOT_HINT', 'Masks, similar as in pages for widgets. Read more in the <a href="https://docs.instantcms.ru/en/manual/widgets/pages" target="_blank">documentation</a>');
+define('LANG_OPENGRAPH_CUT_STITLE', 'Remove site name from titles if enabled in general settings');
+define('LANG_OPENGRAPH_PRESETS', 'Presets for og:image generation');
+define('LANG_OPENGRAPH_PRESETS_NAME', 'Preset name');
+define('LANG_OPENGRAPH_PRESETS_ADD', 'Add preset');
+define('LANG_OPENGRAPH_IMG_TYPE', 'How to generate images');
+define('LANG_OPENGRAPH_IMG_DEF_PRESET', 'Default preset for og:image');
+define('LANG_OPENGRAPH_IMG_TYPE0', 'Generation from presets for og:image');
+define('LANG_OPENGRAPH_IMG_TYPE1', 'Based on the images of the items');
+define('LANG_OPENGRAPH_DELETE_CONFIRM', 'Remove the "{title}" preset?');
+define('LANG_OPENGRAPH_TYPE_DEFAULT', 'Default Open Graph markup type');
+define('LANG_OPENGRAPH_TYPE', 'Open Graph markup type for item');
+define('LANG_OPENGRAPH_TYPE_LIST', 'Open Graph markup type for list');
 define('LANG_OPENGRAPH_TYPE_OTHER', 'Other');
 define('LANG_OPENGRAPH_TYPE_ARTICLES', 'Article');
 define('LANG_OPENGRAPH_TYPE_BOOK', 'Books');
@@ -23,20 +30,69 @@ define('LANG_OPENGRAPH_TYPE_SERIAL', 'Episode');
 define('LANG_OPENGRAPH_TYPE_SHOW', 'Episode of the TV show');
 define('LANG_OPENGRAPH_TYPE_LIVE', 'Broadcast');
 define('LANG_OPENGRAPH_TYPE_MUSIC_VIDEO', 'Music videos');
-define('LANG_OPENGRAPH_ENABLED_CTYPES', 'Content types, which markup');
-define('LANG_OPENGRAPH_ENABLED_CTYPES_HINT', 'When enabled content types will be formed markup. In the content type settings will have additional options');
-define('LANG_OPENGRAPH_IS_HTTPS_AVAILABLE', 'Site is running on https protocol');
-define('LANG_OPENGRAPH_IS_HTTPS_AVAILABLE_HINT', 'Turn on, if website works including via the https Protocol. Make sure also, if you images are stored on another host, it is also accessible via https Protocol');
+define('LANG_OPENGRAPH_ITEM_TITLE_PATTERN', 'Item title pattern');
+define('LANG_OPENGRAPH_ITEM_DESC_PATTERN', 'Item description pattern');
+define('LANG_OPENGRAPH_LIST_TITLE_PATTERN', 'List title pattern');
+define('LANG_OPENGRAPH_LIST_DESC_PATTERN', 'List description pattern');
+define('LANG_OPENGRAPH_ENABLE', 'Enable Open Graph markup');
+define('LANG_OPENGRAPH_HTML_ATTR_VALUE', 'HTML tag prefix attribute value');
+define('LANG_OPENGRAPH_PRINT_IMG_PARAMS', 'Generate additional markup for images (width, height, type)');
 define('LANG_OPENGRAPH_DEFAULT_IMAGE', 'Default Image');
 define('LANG_OPENGRAPH_MAX_IMAGE_COUNT', 'Maximum image count displayed in the og:image');
 define('LANG_OPENGRAPH_DEFAULT_IMAGE_HINT', 'Will be used if content type is not set to a different default image and the entry has no images');
-define('LANG_OPENGRAPH_IMAGE_FIELDS', 'Fields for image Open Graph markup');
+define('LANG_OPENGRAPH_IMAGE_FIELDS', 'Image fields for items');
+define('LANG_OPENGRAPH_DEFAULT_IMAGE_PRESET', 'Default image preset');
+define('LANG_OPENGRAPH_IMAGE_LIST_PRESET', 'Preset for category image');
 define('LANG_OPENGRAPH_IMAGE_FIELD', 'Image Field');
 define('LANG_OPENGRAPH_ADD_FIELD', 'Add field');
-define('LANG_OPENGRAPH_OTHER_FIELDS', 'Additional fields');
+define('LANG_OPENGRAPH_OTHER_FIELDS', 'Additional fields for item');
 define('LANG_OPENGRAPH_FIELD_NAME', 'Field name');
 define('LANG_OPENGRAPH_FIELD_CONTENT', 'specified value');
-define('LANG_OPENGRAPH_FIELD_CONTENT_HINT', 'Not set - will be a choice field');
-define('LANG_OPENGRAPH_FIELD_FUNC', 'Values processing function');
 define('LANG_OPENGRAPH_FIELD_NEED_VALUE', 'You need to enter a value');
-define('LANG_OPENGRAPH_FIELD_NAME_HINT', 'The title, according to the specification <a target="_blank" href="http://ogp.me/">OpenGraphProtocol</a>. You can specify the invariant fields or use designs {key}, where key is the name of a field in a table of records of the content type. You can also specify the expression {host} which will be replaced by current host site protocol prefix — for example, {host}video/embed/{id} will be replaced by https://site.ru/video/embed/123');
+define('LANG_OPENGRAPH_FIELD_NAME_HINT', 'The title, according to the specification <a target="_blank" href="http://ogp.me/">OpenGraphProtocol</a>. Use the entry fields by inserting their names in curly braces. For example, <strong>{title}</strong>, <strong>{category}</strong> etc. You can use the processing of values, more in <a target="_blank" href="https://docs.instantcms.ru/en/manual/settings/seo-patterns">documentation</a>. You can also specify the expression {host} which will be replaced by current host site protocol prefix — for example, {host}video/embed/{id} will be replaced by https://site.ru/video/embed/123');
+define('LANG_OPENGRAPH_FILE_LIST_HINT', 'PHP class in the %s directory');
+define('LANG_OPENGRAPH_CLEAR', 'Clear');
+define('LANG_OPENGRAPH_CLEAR_CONFIRM', 'Delete all generated images?');
+define('LANG_OPENGRAPH_CLEAR_SUCCESS', 'Directory %s cleared');
+define('LANG_OG_OPT_FORMAT', 'Image format');
+define('LANG_OG_OPT_QUALITY', 'Image compression quality');
+define('LANG_OG_OPT_LAYOUT', 'Layout');
+define('LANG_OG_OPT_FONT', 'Font');
+define('LANG_OG_OPT_BASE_COLOR', 'Base color');
+define('LANG_OG_OPT_ACCENT_COLOR', 'Accent color');
+define('LANG_OG_OPT_ACCENT_COLOR_HINT', 'Default for borders, info-text');
+define('LANG_OG_OPT_BG_COLOR', 'Background color');
+define('LANG_OG_OPT_TITLE_COLOR', 'Title color');
+define('LANG_OG_OPT_SHOW_DESC', 'Show description if available');
+define('LANG_OG_OPT_DESCRIPTION_COLOR', 'Description color');
+define('LANG_OG_OPT_SHOW_CAT', 'Show section/category if available');
+define('LANG_OG_OPT_CAT_POS', 'Section/category position');
+define('LANG_OG_OPT_BL', 'Bottom left');
+define('LANG_OG_OPT_BR', 'Bottom right');
+define('LANG_OG_OPT_MB', 'Middle bottom');
+define('LANG_OG_OPT_ML', 'Middle left');
+define('LANG_OG_OPT_MR', 'Middle right');
+define('LANG_OG_OPT_MT', 'Middle top');
+define('LANG_OG_OPT_TL', 'Top left');
+define('LANG_OG_OPT_TR', 'Top right');
+define('LANG_OG_OPT_CENTER', 'Centered');
+define('LANG_OG_OPT_CAT_COLOR', 'Section/category color');
+define('LANG_OG_OPT_BG_IMG', 'Backing image');
+define('LANG_OG_OPT_BG_IMG_TYPE', 'Positioning of the backing image');
+define('LANG_OG_OPT_BG_IMG_TYPE_R', 'Repeat');
+define('LANG_OG_OPT_BG_IMG_TYPE_C', 'Cover');
+define('LANG_OG_OPT_BG_IMG_OPACITY', 'Image opacity');
+define('LANG_OG_OPT_BORDER_POS', 'Image Borders');
+define('LANG_OG_OPT_BORDER_POS_ALL', 'All');
+define('LANG_OG_OPT_BORDER_POS_B', 'Bottom');
+define('LANG_OG_OPT_BORDER_POS_L', 'Left');
+define('LANG_OG_OPT_BORDER_POS_R', 'Right');
+define('LANG_OG_OPT_BORDER_POS_T', 'Top');
+define('LANG_OG_OPT_BORDER_WIDTH', 'Border Width');
+define('LANG_OG_OPT_BORDER_COLOR', 'Border color');
+define('LANG_OG_OPT_WATERMARK', 'Watermark image');
+define('LANG_OG_OPT_WATERMARK_POS', 'Watermark position');
+define('LANG_OG_OPT_SHOW_INFO_TEXT', 'Show additional short text');
+define('LANG_OG_OPT_INFO_TEXT', 'Additional short text');
+define('LANG_OG_OPT_INFO_TEXT_POS', 'Short text position');
+define('LANG_OG_OPT_INFO_TEXT_COLOR', 'Text color');

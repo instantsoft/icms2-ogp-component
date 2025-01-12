@@ -1,13 +1,20 @@
 <?php
-/******************************************************************************/
-//                                                                            //
-//                             InstantMedia 2015                              //
-//	 		  http://www.instantvideo.ru/, support@instantvideo.ru            //
-//                               written by Fuze                              //
-//                                                                            //
-/******************************************************************************/
+
 define('LANG_OPENGRAPH_CONTROLLER', 'Микроформат Open Graph');
-define('LANG_OPENGRAPH_TYPE', 'Тип разметки Open Graph');
+define('LANG_OPENGRAPH_URL_MASK_NOT', 'Маски страниц, для которых не нужна разметка Open Graph');
+define('LANG_OPENGRAPH_URL_MASK_NOT_HINT', 'Маски, аналогичные страницам для виджетов. Подробнее в <a href="https://docs.instantcms.ru/manual/widgets/pages" target="_blank">документации</a>');
+define('LANG_OPENGRAPH_CUT_STITLE', 'Удалять из заголовков название сайта, если это включено в общих настройках');
+define('LANG_OPENGRAPH_PRESETS', 'Пресеты для og:image');
+define('LANG_OPENGRAPH_PRESETS_NAME', 'Название пресета');
+define('LANG_OPENGRAPH_PRESETS_ADD', 'Добавить пресет');
+define('LANG_OPENGRAPH_DELETE_CONFIRM', 'Удалить пресет "{title}"?');
+define('LANG_OPENGRAPH_IMG_TYPE', 'Как формировать изображения');
+define('LANG_OPENGRAPH_IMG_DEF_PRESET', 'Пресет генерации для og:image');
+define('LANG_OPENGRAPH_IMG_TYPE0', 'Генерация из пресетов для og:image');
+define('LANG_OPENGRAPH_IMG_TYPE1', 'На основе изображений записей');
+define('LANG_OPENGRAPH_TYPE_DEFAULT', 'Тип разметки Open Graph по умолчанию');
+define('LANG_OPENGRAPH_TYPE', 'Тип разметки Open Graph для записей');
+define('LANG_OPENGRAPH_TYPE_LIST', 'Тип разметки Open Graph для списка');
 define('LANG_OPENGRAPH_TYPE_OTHER', 'Прочие');
 define('LANG_OPENGRAPH_TYPE_ARTICLES', 'Статьи');
 define('LANG_OPENGRAPH_TYPE_BOOK', 'Книги');
@@ -23,20 +30,69 @@ define('LANG_OPENGRAPH_TYPE_SERIAL', 'Серия сериала');
 define('LANG_OPENGRAPH_TYPE_SHOW', 'Эпизод телешоу');
 define('LANG_OPENGRAPH_TYPE_LIVE', 'Трансляция');
 define('LANG_OPENGRAPH_TYPE_MUSIC_VIDEO', 'Музыкальное видео');
-define('LANG_OPENGRAPH_ENABLED_CTYPES', 'Типы контента, в которых формировать разметку');
-define('LANG_OPENGRAPH_ENABLED_CTYPES_HINT', 'Во включенных типах контента будет формироваться разметка. В настройках типа контента появятся дополнительные опции');
-define('LANG_OPENGRAPH_IS_HTTPS_AVAILABLE', 'Сайт работает по https протоколу');
-define('LANG_OPENGRAPH_IS_HTTPS_AVAILABLE_HINT', 'Включите, если сайт работает в том числе и по https протоколу. Убедитесь так же, если у вас изображения хранятся на другом хосте, он так же доступен по https протоколу.');
+define('LANG_OPENGRAPH_ENABLE', 'Включить разметку Open Graph');
+define('LANG_OPENGRAPH_ITEM_TITLE_PATTERN', 'Шаблон генерации заголовков для записей');
+define('LANG_OPENGRAPH_ITEM_DESC_PATTERN', 'Шаблон генерации описаний для записей');
+define('LANG_OPENGRAPH_LIST_TITLE_PATTERN', 'Шаблон генерации заголовков для списков');
+define('LANG_OPENGRAPH_LIST_DESC_PATTERN', 'Шаблон генерации описаний для списков');
+define('LANG_OPENGRAPH_HTML_ATTR_VALUE', 'Значение атрибута prefix тега HTML');
+define('LANG_OPENGRAPH_PRINT_IMG_PARAMS', 'Формировать дополнительную разметку для изображений (ширина, высота, тип)');
 define('LANG_OPENGRAPH_DEFAULT_IMAGE', 'Изображению по умолчанию');
 define('LANG_OPENGRAPH_MAX_IMAGE_COUNT', 'Максимальное количество изображений, выводимых в og:image');
 define('LANG_OPENGRAPH_DEFAULT_IMAGE_HINT', 'Будет использоваться, если в типе контента не задано другое изображение по умолчанию и у записи нет изображений');
-define('LANG_OPENGRAPH_IMAGE_FIELDS', 'Поля для изображений разметки Open Graph');
+define('LANG_OPENGRAPH_IMAGE_FIELDS', 'Поля для изображений записей');
+define('LANG_OPENGRAPH_DEFAULT_IMAGE_PRESET', 'Пресет для изображения по умолчанию');
+define('LANG_OPENGRAPH_IMAGE_LIST_PRESET', 'Пресет для изображения категории в списке записей');
 define('LANG_OPENGRAPH_IMAGE_FIELD', 'Поле изображения');
 define('LANG_OPENGRAPH_ADD_FIELD', 'Добавить поле');
-define('LANG_OPENGRAPH_OTHER_FIELDS', 'Дополнительные поля разметки');
+define('LANG_OPENGRAPH_OTHER_FIELDS', 'Дополнительные поля разметки для записей');
 define('LANG_OPENGRAPH_FIELD_NAME', 'Название поля');
-define('LANG_OPENGRAPH_FIELD_CONTENT', 'заданное значение');
-define('LANG_OPENGRAPH_FIELD_CONTENT_HINT', 'Не задано - будет выбор поля');
-define('LANG_OPENGRAPH_FIELD_FUNC', 'Функция обработки значения');
+define('LANG_OPENGRAPH_FIELD_CONTENT', 'Заданное значение');
 define('LANG_OPENGRAPH_FIELD_NEED_VALUE', 'Нужно ввести значение');
-define('LANG_OPENGRAPH_FIELD_NAME_HINT', 'Название, согласно спецификации <a target="_blank" href="http://ogp.me/">OpenGraphProtocol</a> или рекомендаций <a target="_blank" href="https://yandex.ru/support/webmaster/open-graph/intro-open-graph.xml">Яндекс</a>. Можно указать неизменяемое значение поля или же воспользоваться конструкциями {key}, где key - название поля в таблице записей типа контента. Так же можно указывать ключевое выражение {host}, которое будет заменено на текущий хост сайта с префиксом протокола, например {host}video/embed/{id} будет заменен на https://site.ru/video/embed/123');
+define('LANG_OPENGRAPH_FIELD_NAME_HINT', 'Название, согласно спецификации <a target="_blank" href="https://ogp.me/">OpenGraphProtocol</a> или рекомендаций <a target="_blank" href="https://yandex.ru/support/webmaster/open-graph/intro-open-graph.xml">Яндекс</a>. В значениии используйте поля записи, вставляя их названия в фигурных скобках. Например, <strong>{title}</strong>, <strong>{category}</strong> и т.п. Можно использовать обработку значений, подробнее в <a target="_blank" href="https://docs.instantcms.ru/manual/settings/seo-patterns">документации</a>. Доступно ключевое выражение {host}, которое будет заменено на текущий хост сайта с префиксом протокола, например {host}video/embed/{id} будет заменен на https://site.ru/video/embed/123.');
+define('LANG_OPENGRAPH_FILE_LIST_HINT', 'PHP класс в директории %s');
+define('LANG_OPENGRAPH_CLEAR', 'Очистить');
+define('LANG_OPENGRAPH_CLEAR_CONFIRM', 'Удалить все сгенерированные изображения?');
+define('LANG_OPENGRAPH_CLEAR_SUCCESS', 'Директория %s очищена');
+define('LANG_OG_OPT_FORMAT', 'Формат изображений');
+define('LANG_OG_OPT_QUALITY', 'Качество сжатия изображений');
+define('LANG_OG_OPT_LAYOUT', 'Макет');
+define('LANG_OG_OPT_FONT', 'Шрифт');
+define('LANG_OG_OPT_BASE_COLOR', 'Основной цвет');
+define('LANG_OG_OPT_ACCENT_COLOR', 'Акцентный цвет');
+define('LANG_OG_OPT_ACCENT_COLOR_HINT', 'По умолчанию для границ, краткого текста');
+define('LANG_OG_OPT_BG_COLOR', 'Цвет фона');
+define('LANG_OG_OPT_TITLE_COLOR', 'Цвет заголовка');
+define('LANG_OG_OPT_SHOW_DESC', 'Показывать описание если есть');
+define('LANG_OG_OPT_DESCRIPTION_COLOR', 'Цвет описания');
+define('LANG_OG_OPT_SHOW_CAT', 'Показывать раздел/категорию если есть');
+define('LANG_OG_OPT_CAT_POS', 'Позиция раздела/категории');
+define('LANG_OG_OPT_BL', 'Снизу слева');
+define('LANG_OG_OPT_BR', 'Снизу справа');
+define('LANG_OG_OPT_MB', 'Посередине снизу');
+define('LANG_OG_OPT_ML', 'Посередине слева');
+define('LANG_OG_OPT_MR', 'Посередине справа');
+define('LANG_OG_OPT_MT', 'Посередине вверху');
+define('LANG_OG_OPT_TL', 'Сверху слева');
+define('LANG_OG_OPT_TR', 'Сверху справа');
+define('LANG_OG_OPT_CENTER', 'По центру');
+define('LANG_OG_OPT_CAT_COLOR', 'Цвет раздела/категории');
+define('LANG_OG_OPT_BG_IMG', 'Изображение подложки');
+define('LANG_OG_OPT_BG_IMG_TYPE', 'Расположение изображения подложки');
+define('LANG_OG_OPT_BG_IMG_TYPE_R', 'Замостить');
+define('LANG_OG_OPT_BG_IMG_TYPE_C', 'Растянуть');
+define('LANG_OG_OPT_BG_IMG_OPACITY', 'Прозрачность изображения');
+define('LANG_OG_OPT_BORDER_POS', 'Границы изображения');
+define('LANG_OG_OPT_BORDER_POS_ALL', 'С четырёх сторон');
+define('LANG_OG_OPT_BORDER_POS_B', 'Снизу');
+define('LANG_OG_OPT_BORDER_POS_L', 'Слева');
+define('LANG_OG_OPT_BORDER_POS_R', 'Справа');
+define('LANG_OG_OPT_BORDER_POS_T', 'Сверху');
+define('LANG_OG_OPT_BORDER_WIDTH', 'Ширина границы');
+define('LANG_OG_OPT_BORDER_COLOR', 'Цвет границы');
+define('LANG_OG_OPT_WATERMARK', 'Изображение водяного знака');
+define('LANG_OG_OPT_WATERMARK_POS', 'Позиция водяного знака');
+define('LANG_OG_OPT_SHOW_INFO_TEXT', 'Показывать дополнительный краткий текст');
+define('LANG_OG_OPT_INFO_TEXT', 'Дополнительный краткий текст');
+define('LANG_OG_OPT_INFO_TEXT_POS', 'Позиция краткого текста');
+define('LANG_OG_OPT_INFO_TEXT_COLOR', 'Цвет текста');
