@@ -22,7 +22,7 @@ class onOpengraphUsersProfileView extends cmsAction {
         $this->setBasicOpenGraph(
             'profile',
             $profile['nickname'],
-            $profile['status_text'],
+            $profile['status_text'] ?: '',
             href_to_profile($profile, false, true),
             [$avatars['normal']]
         );

@@ -140,7 +140,7 @@ class opengraph extends cmsFrontend {
             switch ($this->options['display_image_type']) {
                 case 'item':
 
-                    if ($this->options['default_image']) {
+                    if ($this->options['default_image'] && !empty($this->options['default_image'][$this->options['default_image_preset']])) {
                         $image_urls = [$this->options['default_image'][$this->options['default_image_preset']]];
                     }
 
